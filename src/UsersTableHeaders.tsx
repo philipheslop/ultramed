@@ -1,23 +1,26 @@
 import { useState } from "react";
 
-export const UsersTableHeaders = ({ columns, handleSort }) => {
+export const UsersTableHeaders = ({ coloumns, processTableData }) => {
   const [sortField, setSortField] = useState("");
   const [order, setOrder] = useState("asc");
-  const handleSortChange = (accessor) => {
-    console.log(accessor);
+  const handleTableDataChange = (coloumnId) => {
+    console.log(coloumnId);
     const sortOrder =
-      accessor === sortField && order === "asc" ? "desc" : "asc";
-    setSortField(accessor);
+      coloumnId === sortField && order === "asc" ? "desc" : "asc";
+    setSortField(coloumnId);
     setOrder(sortOrder);
-    handleSort(accessor, sortOrder);
+    processTableData(coloumnId, sortOrder);
   };
 
   return (
     <thead>
       <tr>
-        {columns.map(({ label, accessor }) => {
+        {coloumns.map(({ label, coloumnId }) => {
           return (
-            <th key={accessor} onClick={() => handleSortChange(accessor)}>
+            <th
+              key={coloumnId}
+              onClick={() => handleTableDataChange(coloumnId)}
+            >
               {label}
             </th>
           );

@@ -13,27 +13,7 @@ export const Users = () => {
           <div>Loading...</div>
         ) : (
           <>
-            <h1>Users</h1>
             <UsersTable />
-            <h2>end of table</h2>
-            <table border={1}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </>
         )}
       </div>

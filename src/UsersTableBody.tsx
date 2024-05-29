@@ -1,12 +1,12 @@
-export const UsersTableBody = ({ columns, sortedData }) => {
+export const UsersTableBody = ({ coloumns, processedData }) => {
   return (
     <tbody>
-      {sortedData.map((user) => {
+      {processedData.map((user) => {
         return (
           <tr key={user.id}>
-            {columns.map(({ accessor }) => {
-              const tData = user[accessor] ? user[accessor] : "——";
-              return <td key={accessor}>{tData}</td>;
+            {coloumns.map(({ coloumnId }) => {
+              const tData = user[coloumnId] ? user[coloumnId] : "——";
+              return <td key={coloumnId}>{tData}</td>;
             })}
           </tr>
         );
