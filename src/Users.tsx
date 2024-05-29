@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { getUsers, User } from "./getUsers";
+import { UsersTable } from "./UsersTable";
 
 export const Users = () => {
   const { isLoading, data } = useQuery<User[]>(["users"], getUsers);
@@ -13,12 +14,14 @@ export const Users = () => {
         ) : (
           <>
             <h1>Users</h1>
+            <UsersTable />
+            <h2>end of table</h2>
             <table border={1}>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Phone</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
