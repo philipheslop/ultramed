@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { getUsers, User } from "./getUsers";
 import { UsersTableBody } from "./UsersTableBody";
 import { UsersTableHeaders } from "./UsersTableHeaders";
+import { DataVis } from "./DataVis";
 
 export const UsersTable = () => {
   const coloumns = [
@@ -56,6 +57,7 @@ export const UsersTable = () => {
         value={filter}
         onChange={(event) => setFilterQuery(event.target.value)}
       />
+      <DataVis userData={tableData} />
       <table className="table min-w-full text-left text-sm font-light text-surface dark:text-white">
         <UsersTableHeaders
           coloumns={coloumns}
