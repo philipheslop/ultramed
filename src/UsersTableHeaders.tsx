@@ -13,7 +13,7 @@ export const UsersTableHeaders = ({ coloumns, processTableData }) => {
   };
 
   return (
-    <thead>
+    <thead className="border-b border-neutral-200 font-medium dark:border-white/10">
       <tr>
         {coloumns.map(({ label, coloumnId }) => {
           return (

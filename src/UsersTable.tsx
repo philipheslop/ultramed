@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getUsers, User } from "./getUsers";
 import { UsersTableBody } from "./UsersTableBody";
 import { UsersTableHeaders } from "./UsersTableHeaders";
@@ -12,10 +12,14 @@ export const UsersTable = () => {
   ];
 
   const { isLoading, data } = useQuery<User[]>(["users"], getUsers);
-  const [tableData, setTableData] = useState(data);
-  const [filter, setFilter] = useState("");
+  //const [tableData, setTableData] = useState(data);
 
-  const processTableData = (sortField, sortOrder) => {
+  //Save Queries for derived state
+  const [filter, setFilter] = useState("");
+  const [sortField, setSortField] = useState(coloumns[0].coloumnId);
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const tableData = useMemo(() => {
     if (sortField) {
       const sorted = [...data].sort((a, b) => {
         return (
@@ -24,19 +28,21 @@ export const UsersTable = () => {
           }) * (sortOrder === "asc" ? 1 : -1)
         );
       });
-
+      console.log("td2");
       console.log(sorted);
-      setTableData(sorted);
+      return sorted?.filter((person) =>
+        person.name.toLowerCase().includes(filter.toLowerCase()),
+      );
     }
+  }, [filter, sortField, sortOrder]);
+
+  const setSortQuery = (sortField, sortOrder) => {
+    setSortField(sortField);
+    setSortOrder(sortOrder);
   };
 
-  const filterTableData = (filter) => {
+  const setFilterQuery = (filter) => {
     setFilter(filter);
-    const filteredData = data?.filter((person) =>
-      person.name.toLowerCase().includes(filter.toLowerCase()),
-    );
-
-    setTableData(filteredData);
   };
 
   return (
@@ -48,13 +54,12 @@ export const UsersTable = () => {
         type="text"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         value={filter}
-        onChange={(event) => filterTableData(event.target.value)}
+        onChange={(event) => setFilterQuery(event.target.value)}
       />
-      <table className="table">
-        <caption>Users</caption>
+      <table className="table min-w-full text-left text-sm font-light text-surface dark:text-white">
         <UsersTableHeaders
           coloumns={coloumns}
-          processTableData={processTableData}
+          processTableData={setSortQuery}
         />
         <UsersTableBody coloumns={coloumns} processedData={tableData} />
       </table>
