@@ -1,9 +1,12 @@
 import { useQuery } from "react-query";
-import { useState, useMemo } from "react";
+import { useState, useMemo, createContext } from "react";
 import { getUsers, User } from "./getUsers";
 import { UsersTableBody } from "./UsersTableBody";
 import { UsersTableHeaders } from "./UsersTableHeaders";
 import { DataVis } from "./DataVis";
+import { UserAddModal } from "./UserAddModal";
+
+export const CurrentUserContext = createContext(null);
 
 export const UsersTable = () => {
   const coloumns = [
@@ -13,29 +16,38 @@ export const UsersTable = () => {
   ];
 
   const { isLoading, data } = useQuery<User[]>(["users"], getUsers);
+  const [currentUser, setCurrentUser] = useState(null);
   //const [tableData, setTableData] = useState(data);
 
-  //Save Queries for derived state
+  //Save Queries & data changes for derived state
   const [filter, setFilter] = useState("");
   const [sortField, setSortField] = useState(coloumns[0].coloumnId);
   const [sortOrder, setSortOrder] = useState("asc");
 
+  //Lists used to store changes to data
+  //these should be replaced with API calls
+  //(but this also allows batching)
+  const [newUsers, setNewUsers] = useState([]);
+  const [removedUsers, setRemovedUsers] = useState([]);
+
   const tableData = useMemo(() => {
     if (sortField) {
-      const sorted = [...data].sort((a, b) => {
+      const sorted = [
+        ...data
+          .filter((user) => removedUsers.indexOf(user) < 0)
+          .concat(newUsers),
+      ].sort((a, b) => {
         return (
           a[sortField].toString().localeCompare(b[sortField].toString(), "en", {
             numeric: true,
           }) * (sortOrder === "asc" ? 1 : -1)
         );
       });
-      console.log("td2");
-      console.log(sorted);
       return sorted?.filter((person) =>
         person.name.toLowerCase().includes(filter.toLowerCase()),
       );
     }
-  }, [filter, sortField, sortOrder]);
+  }, [filter, sortField, sortOrder, newUsers, removedUsers]);
 
   const setSortQuery = (sortField, sortOrder) => {
     setSortField(sortField);
@@ -46,8 +58,36 @@ export const UsersTable = () => {
     setFilter(filter);
   };
 
+  const addUser = (user: User) => {
+    setNewUsers([...newUsers, user]);
+  };
+
+  const removeCurrentUser = () => {
+    setRemovedUsers([...removedUsers, currentUser]);
+    setCurrentUser(null);
+  };
+
   return (
     <>
+      <UserAddModal addUser={addUser} />
+      {currentUser === null ? (
+        <div>No User Selected</div>
+      ) : (
+        <div>
+          <h2>Current User</h2>
+          Name: {currentUser.name} <br />
+          Email: {currentUser.email} <br />
+          Status: {currentUser.status} <br />
+          <button
+            className="bg-gray-200 text-black active:bg-blue-500 
+      font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+            type="button"
+            onClick={() => removeCurrentUser()}
+          >
+            Remove User
+          </button>
+        </div>
+      )}
       <h2>Users - Type to filter the list:</h2>
       <input
         id="filter"
@@ -63,7 +103,9 @@ export const UsersTable = () => {
           coloumns={coloumns}
           processTableData={setSortQuery}
         />
-        <UsersTableBody coloumns={coloumns} processedData={tableData} />
+        <CurrentUserContext.Provider value={setCurrentUser}>
+          <UsersTableBody coloumns={coloumns} processedData={tableData} />
+        </CurrentUserContext.Provider>
       </table>
     </>
   );

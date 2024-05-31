@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const DataVis = ({ userData }) => {
+  const [showDataVis, setShowDataVis] = useState(false);
+
   const pieLabels = ["Active", "Invited", "Invite Expired"];
   const pieData = {
     labels: pieLabels,
@@ -47,5 +50,17 @@ export const DataVis = ({ userData }) => {
       user.status.toLowerCase().includes(label.toLowerCase()),
     ).length;
   });*/
-  return <Pie redraw={true} data={pieData} />;
+  return (
+    <>
+      <button
+        className="bg-gray-200 text-black active:bg-blue-500 
+font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+        type="button"
+        onClick={() => setShowDataVis(!showDataVis)}
+      >
+        Toggle Data Visualisation
+      </button>
+      {showDataVis ? <Pie redraw={true} data={pieData} /> : null}
+    </>
+  );
 };

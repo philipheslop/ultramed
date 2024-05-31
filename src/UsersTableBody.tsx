@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CurrentUserContext } from "./Users";
+import { CurrentUserContext } from "./UsersTable";
 
 export const UsersTableBody = ({ coloumns, processedData }) => {
   const setCurrentUser = useContext(CurrentUserContext);

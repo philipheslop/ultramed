@@ -7,7 +7,7 @@ export default function App() {
   console.log("started app");
   return (
     <QueryClientProvider client={queryClient}>
-      <h1>App</h1>
+      <h1>Ultramed User Dashboard</h1>
       <Users />
     </QueryClientProvider>
   );
