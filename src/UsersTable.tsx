@@ -71,15 +71,17 @@ export const UsersTable = () => {
     <>
       <UserAddModal addUser={addUser} />
       {currentUser === null ? (
-        <div>No User Selected</div>
+        <div className="text-xs text-center w-128 bg-blue-100 shadow rounded">
+          ...No User Selected...
+        </div>
       ) : (
-        <div>
-          <h2>Current User</h2>
-          Name: {currentUser.name} <br />
-          Email: {currentUser.email} <br />
-          Status: {currentUser.status} <br />
+        <div className="w-128 bg-blue-100 shadow rounded">
+          <div className="text-center text-lg font-bold">Current User</div>
+          <span className="font-bold">Name:</span> {currentUser.name} <br />
+          <span className="font-bold">Email:</span> {currentUser.email} <br />
+          <span className="font-bold">Status:</span> {currentUser.status} <br />
           <button
-            className="bg-gray-200 text-black active:bg-blue-500 
+            className="text-xs bg-gray-200 text-black active:bg-blue-500 
       font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
             type="button"
             onClick={() => removeCurrentUser()}
@@ -88,7 +90,13 @@ export const UsersTable = () => {
           </button>
         </div>
       )}
-      <h2>Users - Type to filter the list:</h2>
+      <br />
+      <DataVis userData={tableData} />
+      <br />
+      <br />
+      <div className="text-center text-lg font-bold">
+        Users - Type to filter by name:
+      </div>
       <input
         id="filter"
         name="filter"
@@ -97,7 +105,7 @@ export const UsersTable = () => {
         value={filter}
         onChange={(event) => setFilterQuery(event.target.value)}
       />
-      <DataVis userData={tableData} />
+      <br />
       <table className="table min-w-full text-left text-sm font-light text-surface dark:text-white">
         <UsersTableHeaders
           coloumns={coloumns}

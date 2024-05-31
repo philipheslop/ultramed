@@ -22,6 +22,13 @@ export const UsersTableHeaders = ({ coloumns, processTableData }) => {
               onClick={() => handleTableDataChange(coloumnId)}
             >
               {label}
+              {coloumnId === sortField ? (
+                order === "asc" ? (
+                  <>&darr;</>
+                ) : (
+                  <>&uarr;</>
+                )
+              ) : null}
             </th>
           );
         })}
