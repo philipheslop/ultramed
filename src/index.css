@@ -68,3 +68,24 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.container {
+  background: rgb(221, 239, 250);
+  flex-grow: 1;
+  display: flex;
+  width: 100%;
+  min-height: 50vh;
+  gap: 10px;
+}
+
+/* If the container is larger than 700px */
+@media (min-width: 700px) {
+  .container {
+    gap: 20px;
+  }
+}
+
+.table-item:hover {
+  background-color: bisque;
+  cursor: pointer;
+}

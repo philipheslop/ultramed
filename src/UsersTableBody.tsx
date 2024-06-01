@@ -10,7 +10,7 @@ export const UsersTableBody = ({ coloumns, processedData }) => {
         return (
           <tr
             key={user.id}
-            className="border-b border-neutral-200 dark:border-white/10"
+            className="table-item border-b border-neutral-200 dark:border-white/10"
             onClick={() => setCurrentUser(user)}
           >
             {coloumns.map(({ coloumnId }) => {

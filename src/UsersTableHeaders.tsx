@@ -18,6 +18,7 @@ export const UsersTableHeaders = ({ coloumns, processTableData }) => {
         {coloumns.map(({ label, coloumnId }) => {
           return (
             <th
+              className="table-item"
               key={coloumnId}
               onClick={() => handleTableDataChange(coloumnId)}
             >

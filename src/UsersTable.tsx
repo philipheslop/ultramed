@@ -69,52 +69,60 @@ export const UsersTable = () => {
 
   return (
     <>
-      <UserAddModal addUser={addUser} />
-      {currentUser === null ? (
-        <div className="text-xs text-center w-128 bg-blue-100 shadow rounded">
-          ...No User Selected...
-        </div>
-      ) : (
-        <div className="w-128 bg-blue-100 shadow rounded">
+      <div className="container">
+        <div>
           <div className="text-center text-lg font-bold">Current User</div>
-          <span className="font-bold">Name:</span> {currentUser.name} <br />
-          <span className="font-bold">Email:</span> {currentUser.email} <br />
-          <span className="font-bold">Status:</span> {currentUser.status} <br />
-          <button
-            className="text-xs bg-gray-200 text-black active:bg-blue-500 
+          {currentUser === null ? (
+            <div className="text-xs text-center w-128 bg-blue-100 shadow rounded">
+              ...No User Selected...
+            </div>
+          ) : (
+            <div className="w-128 bg-blue-100 shadow rounded">
+              <span className="font-bold">Name:</span> {currentUser.name} <br />
+              <span className="font-bold">Email:</span> {currentUser.email}{" "}
+              <br />
+              <span className="font-bold">Status:</span> {currentUser.status}{" "}
+              <br />
+              <button
+                className="w-full text-xs bg-gray-200 text-black active:bg-blue-500 
       font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-            type="button"
-            onClick={() => removeCurrentUser()}
-          >
-            Remove User
-          </button>
+                type="button"
+                onClick={() => removeCurrentUser()}
+              >
+                Remove User
+              </button>
+            </div>
+          )}
+          <br />
+          <UserAddModal addUser={addUser} />
+          <DataVis userData={tableData} />
+          <br />
+          <br />
+          <div className="text-center text-lg font-bold">
+            Users - Type to filter by name:
+          </div>
+          <input
+            id="filter"
+            name="filter"
+            type="text"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            value={filter}
+            onChange={(event) => setFilterQuery(event.target.value)}
+          />
+          <br />
         </div>
-      )}
-      <br />
-      <DataVis userData={tableData} />
-      <br />
-      <br />
-      <div className="text-center text-lg font-bold">
-        Users - Type to filter by name:
+        <div>
+          <table className="table min-w-full text-left text-sm font-light text-surface dark:text-white">
+            <UsersTableHeaders
+              coloumns={coloumns}
+              processTableData={setSortQuery}
+            />
+            <CurrentUserContext.Provider value={setCurrentUser}>
+              <UsersTableBody coloumns={coloumns} processedData={tableData} />
+            </CurrentUserContext.Provider>
+          </table>
+        </div>
       </div>
-      <input
-        id="filter"
-        name="filter"
-        type="text"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        value={filter}
-        onChange={(event) => setFilterQuery(event.target.value)}
-      />
-      <br />
-      <table className="table min-w-full text-left text-sm font-light text-surface dark:text-white">
-        <UsersTableHeaders
-          coloumns={coloumns}
-          processTableData={setSortQuery}
-        />
-        <CurrentUserContext.Provider value={setCurrentUser}>
-          <UsersTableBody coloumns={coloumns} processedData={tableData} />
-        </CurrentUserContext.Provider>
-      </table>
     </>
   );
 };
